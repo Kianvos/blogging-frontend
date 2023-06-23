@@ -1,0 +1,34 @@
+import React, {useEffect, useState} from 'react';
+import Story from "../../elements/story/story";
+import './story.css';
+import {StoryApi} from "../../../../api/story";
+
+const Homepage = () => {
+
+    const [isLoading, setLoading] = useState(true);
+    const [storyList, setStoryList] = useState([]);
+
+    useEffect(() => {
+        StoryApi.get()
+            .then((storyList) => {
+                setStoryList(storyList);
+                console.log(storyList)
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
+
+
+    return (
+        <div className={"container"}>
+            {
+                storyList.map((story, index) => (
+                    <Story key={story.id} id={story.id} title={story.title} description={story.description} user={story.user} image={story.image}/>
+                ))
+            }
+        </div>
+    );
+}
+
+export default Homepage;

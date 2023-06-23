@@ -1,0 +1,9 @@
+.story{
+    border: 1px solid black;
+    width: 35vw;
+}
+
+.story-image{
+    width: 100%;
+    height: auto;
+}
