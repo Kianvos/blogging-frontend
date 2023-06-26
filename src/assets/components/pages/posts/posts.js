@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './post.css';
-import {StoryApi} from "../../../../api/story";
+import {StoryApi} from "../../../../helper/api/story";
 import {useParams} from "react-router-dom";
 
 const Posts = () => {
@@ -10,12 +10,10 @@ const Posts = () => {
     const [storyInfo, setStoryInfo] = useState([]);
 
     useEffect(() => {
-        console.log(id + "TEST");
         StoryApi.getStory(id)
             .then((story) => {
                 setPostList(story.posts);
                 setStoryInfo(story)
-                console.log(story.posts)
             })
             .finally(() => {
                 setLoading(false);

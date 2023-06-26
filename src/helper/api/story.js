@@ -3,7 +3,7 @@ import { api } from "./config"
 export const StoryApi = {
     get: async function (e) {
         const response = await api.request({
-            url: `/stories`,
+            url: `api/stories`,
             method: "GET",
         })
 
@@ -11,7 +11,7 @@ export const StoryApi = {
     },
     getStory: async function (storyId) {
         const response = await api.request({
-            url: `/story/${storyId}`,
+            url: `api/story/${storyId}`,
             method: "GET",
         })
 

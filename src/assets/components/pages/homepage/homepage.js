@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Story from "../../elements/story/story";
 import './story.css';
-import {StoryApi} from "../../../../api/story";
+import {StoryApi} from "../../../../helper/api/story";
 
 const Homepage = () => {
 
@@ -12,7 +12,6 @@ const Homepage = () => {
         StoryApi.get()
             .then((storyList) => {
                 setStoryList(storyList);
-                console.log(storyList)
             })
             .finally(() => {
                 setLoading(false);
