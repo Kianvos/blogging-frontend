@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import {RiCloseLine, RiMenuLine} from "react-icons/ri";
 
 import {JWT} from "../../../helper/jwt";
@@ -35,7 +35,7 @@ const Header = () => {
             <div className={`navbar-menu ${menuOpen ? 'is-active' : ''}`}>
                 <ul>
                     <li>
-                        <NavLink onClick={closeMenu} to="/post">Post</NavLink>
+                        <NavLink onClick={closeMenu} to="/story/new">Nieuwe story</NavLink>
                     </li>
                     <li>
                         <NavLink onClick={closeMenu} to="/test">Test</NavLink>
