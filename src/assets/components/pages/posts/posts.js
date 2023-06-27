@@ -25,7 +25,7 @@ const Posts = () => {
             <h1>{storyInfo.title}</h1>
             {
                 postList.map((post, index) => (
-                    <p>{post.description}</p>
+                    <p key={post.id}>{post.description}</p>
                     // <Story key={story.id} title={story.title} description={story.description} user={story.user} image={story.image}/>
                 ))
             }
