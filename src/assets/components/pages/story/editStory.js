@@ -27,7 +27,7 @@ function EditStory() {
                 setImage(response.image);
             })
             .catch(err => {
-                error.log(err);
+                console.error(err);
                 setError(true);
             });
     }
@@ -38,7 +38,7 @@ function EditStory() {
                 navigate('/');
             })
             .catch(err => {
-                error.log(err);
+                console.error(err);
                 setError(true);
             });
     }

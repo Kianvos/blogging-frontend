@@ -1,9 +1,9 @@
 import {api} from "./config"
 
 export const PostApi = {
-    getStory: async function (storyId) {
+    getPost: async function (storyId) {
         const response = await api.request({
-            url: `api/story/${storyId}`,
+            url: `api/post/${storyId}`,
             method: "GET",
         })
 
@@ -32,7 +32,7 @@ export const PostApi = {
             image: img
         }
         const response = await api.request({
-            url: `api/story/edit/${id}`,
+            url: `api/post/edit/${id}`,
             method: "PUT",
             data: data
         })
@@ -41,7 +41,7 @@ export const PostApi = {
     },
     deletePost: async function (id) {
         const response = await api.request({
-            url: `api/story/delete/${id}`,
+            url: `api/post/delete/${id}`,
             method: "DELETE",
         })
 
