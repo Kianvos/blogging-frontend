@@ -5,7 +5,7 @@
 }
 .form {
     position: relative;
-    z-index: 1;
+    /*z-index: 1;*/
     background: #FFFFFF;
     max-width: 360px;
     margin: 0 auto 100px;
@@ -22,7 +22,7 @@
     box-sizing: border-box;
     font-size: 14px;
 }
-.form .login-button {
+.form .form-button {
     text-transform: uppercase;
     background: darkslategray;
     width: 100%;
@@ -32,7 +32,7 @@
     font-size: 14px;
     cursor: pointer;
 }
-.form button:hover,.form button:active,.form button:focus {
+.form form-button:hover,.form form-button:active,.form form-button:focus {
     background: cadetblue;
 }
 

@@ -5,7 +5,6 @@ import {StoryApi} from "../../../../helper/api/story";
 
 const Homepage = () => {
 
-    const [isLoading, setLoading] = useState(true);
     const [storyList, setStoryList] = useState([]);
 
     useEffect(() => {
@@ -14,7 +13,6 @@ const Homepage = () => {
                 setStoryList(storyList);
             })
             .finally(() => {
-                setLoading(false);
             });
     }, []);
 

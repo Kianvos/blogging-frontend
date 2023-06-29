@@ -9,6 +9,7 @@ import Login from "./assets/components/pages/login/login";
 import NewStory from "./assets/components/pages/story/newStory";
 import {JWT} from "./helper/jwt";
 import {useEffect, useState} from "react";
+import EditStory from "./assets/components/pages/story/editStory";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/" element={<Homepage/>}/>
                     <Route path="/story/:id" element={<Posts/>}/>
                     <Route path="/story/new" element={loggedIn ? <NewStory/> : <Navigate to="/login"/>}/>
+                    <Route path="/story/edit/:id" element={loggedIn ? <EditStory/> : <Navigate to="/login"/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>

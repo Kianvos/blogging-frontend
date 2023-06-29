@@ -26,7 +26,7 @@ const Story = (props) => {
                 <Link to={`/story/${props.id}`}>Naar posts</Link>
                 {
                     isOwner ? <div>
-                        <Link to={`/story/${props.id}/edit`}>Edit story</Link>
+                        <Link to={`/story/edit/${props.id}`}>Edit story</Link>
                     </div> : null
                 }
             </div>

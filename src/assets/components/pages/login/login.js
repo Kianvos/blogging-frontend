@@ -40,7 +40,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit} className="login-form">
                     <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
                     <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                    <button className={"login-button"}>login</button>
+                    <button className={"form-button"}>login</button>
                 </form>
             </div>
         </div>
