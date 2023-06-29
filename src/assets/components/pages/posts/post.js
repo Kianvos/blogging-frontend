@@ -3,7 +3,7 @@ import {JWT} from "../../../../helper/jwt";
 import {useEffect, useState} from "react";
 import ImageGallery from 'react-image-gallery';
 
-const Story = (props) => {
+const Post = (props) => {
     const title = props.title;
     const description = props.description;
     const images = props.images;
@@ -48,7 +48,10 @@ const Story = (props) => {
         <div className={"post"}>
             <h2 className={""}>{title}</h2>
             <p>{description}</p>
-            <ImageGallery items={setupImageGallery()} showIndex={true} showPlayButton={false} showFullscreenButton={false}/>
+            { images.length > 0 ?
+                <ImageGallery items={setupImageGallery()} showThumbnails={false} showIndex={true} showPlayButton={false} showFullscreenButton={false}/>
+                : null
+            }
             <div>
                 {
                     isOwner ? <div>
@@ -61,4 +64,4 @@ const Story = (props) => {
     );
 }
 
-export default Story;
+export default Post;

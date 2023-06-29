@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import './post.css';
 import {StoryApi} from "../../../../helper/api/story";
 import {useParams} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-import Story from "./post";
 
 import "react-image-gallery/styles/css/image-gallery.css";
+import Post from "./post";
+
+import './post.css';
+
 
 const Posts = () => {
     const navigate = useNavigate();
@@ -40,8 +42,7 @@ const Posts = () => {
 
             {
                 postList.map((post, index) => (
-                    <Story key={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Story>
-
+                    <Post key={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Post>
                 ))
             }
         </div>

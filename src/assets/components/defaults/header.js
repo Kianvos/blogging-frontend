@@ -37,15 +37,15 @@ const Header = () => {
                     <li>
                         <NavLink onClick={closeMenu} to="/story/new">Nieuwe story</NavLink>
                     </li>
-                    <li>
-                        <NavLink onClick={closeMenu} to="/test">Test</NavLink>
-                    </li>
                     {
                         loggedIn ?
                             <li>
                                 <button onClick={HandleLogout}>Uitloggen</button>
                             </li>
-                            : null
+                            :
+                            <li>
+                                <NavLink onClick={closeMenu} to="/login">Login</NavLink>
+                            </li>
                     }
                 </ul>
             </div>

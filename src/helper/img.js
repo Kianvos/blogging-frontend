@@ -6,8 +6,8 @@ export const IMG = {
         return new Promise((resolve) => {
             Resizer.imageFileResizer(
                 file,
-                800,
-                800,
+                600,
+                600,
                 "JPEG",
                 100,
                 0,

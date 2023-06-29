@@ -2,3 +2,9 @@
     border: 1px solid black;
     width: 35vw;
 }
+
+@media screen and (max-width: 768px) {
+    .post {
+        width: 80vw;
+    }
+}

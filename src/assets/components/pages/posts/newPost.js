@@ -15,6 +15,9 @@ function NewPost() {
 
     const [error, setError] = useState(false);
 
+
+    const [status, setstatus] = useState(0);
+
     const handleImageSelect = async (event) => {
         let i = 0;
         for (const file of event.target.files) {
@@ -29,6 +32,7 @@ function NewPost() {
                     };
                     setImage((prevImage) => [...prevImage, tmp]);
                 } catch (error) {
+                    setstatus(2);
                     console.error("Er is een fout opgetreden bij het omzetten van de afbeelding:", error);
                 }
             }
@@ -47,6 +51,8 @@ function NewPost() {
             })
             .catch(err => {
                 console.log(err.statusCode)
+                setstatus(err.statusCode);
+
                 setError(true);
             });
     }
