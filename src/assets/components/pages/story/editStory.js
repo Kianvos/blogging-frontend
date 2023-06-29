@@ -27,7 +27,7 @@ function EditStory() {
                 setImage(response.image);
             })
             .catch(err => {
-                console.log(err);
+                error.log(err);
                 setError(true);
             });
     }
@@ -38,7 +38,7 @@ function EditStory() {
                 navigate('/');
             })
             .catch(err => {
-                console.log(err);
+                error.log(err);
                 setError(true);
             });
     }
@@ -64,7 +64,7 @@ function EditStory() {
     function editStory(title, description, img) {
         StoryApi.editStory(id, title, description, img)
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 navigate(`/story/${id}`);
             })
             .catch(err => {

@@ -55,6 +55,7 @@ function NewStory() {
                 : null
             }
             <div className="form">
+                <h1>Nieuwe story</h1>
                 <form onSubmit={handleSubmit} className="story-form">
                     <input type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
                     <textarea placeholder="Kort vertellen over de blog."

@@ -3,6 +3,9 @@ import './post.css';
 import {StoryApi} from "../../../../helper/api/story";
 import {useParams} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
+import Story from "./post";
+
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const Posts = () => {
     const navigate = useNavigate();
@@ -14,7 +17,7 @@ const Posts = () => {
         StoryApi.getStory(id)
             .then((story) => {
                 setPostList(story.posts);
-                setStoryInfo(story)
+                setStoryInfo(story);
             })
             .catch((error) => {
                 if (error.response && error.response.status === 404) {
@@ -31,12 +34,14 @@ const Posts = () => {
         <div className={"container"}>
             <div>
                 <h1>{storyInfo.title}</h1>
-                <button>Maak post</button>
+                <button onClick={() => navigate(`/post/new/${id}`)}>Maak post</button>
             </div>
+            <p>{storyInfo.description}</p>
+
             {
                 postList.map((post, index) => (
-                    <p key={post.id}>{post.description}</p>
-                    // <Story key={story.id} title={story.title} description={story.description} user={story.user} image={story.image}/>
+                    <Story key={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Story>
+
                 ))
             }
         </div>

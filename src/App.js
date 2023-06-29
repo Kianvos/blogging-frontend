@@ -10,6 +10,7 @@ import NewStory from "./assets/components/pages/story/newStory";
 import {JWT} from "./helper/jwt";
 import {useEffect, useState} from "react";
 import EditStory from "./assets/components/pages/story/editStory";
+import NewPost from "./assets/components/pages/posts/newPost";
 
 
 function App() {
@@ -30,7 +31,11 @@ function App() {
                     <Route path="/story/:id" element={<Posts/>}/>
                     <Route path="/story/new" element={loggedIn ? <NewStory/> : <Navigate to="/login"/>}/>
                     <Route path="/story/edit/:id" element={loggedIn ? <EditStory/> : <Navigate to="/login"/>}/>
-                    <Route path="/login" element={<Login/>}/>
+
+                    <Route path="/post/new/:storyId" element={loggedIn ? <NewPost/> : <Navigate to="/login"/>}/>
+                    <Route path="/post/edit/:id" element={loggedIn ? <EditStory/> : <Navigate to="/login"/>}/>
+
+                    <Route path="/login" element={loggedIn ? <Navigate to={"/"}/> : <Login/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>
             </main>
