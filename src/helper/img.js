@@ -19,7 +19,7 @@ export const IMG = {
         });
     },
     base64ToImage: function (base64String) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const byteString = atob(base64String.split(',')[1]);
             const mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
             const arrayBuffer = new ArrayBuffer(byteString.length);

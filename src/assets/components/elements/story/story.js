@@ -12,7 +12,7 @@ const Story = (props) => {
 
     useEffect(() => {
         const token = JWT.decodeToken();
-        setOwner(token.sub == user.id);
+        setOwner(parseInt(token.sub) === user.id);
     }, [user.id]);
 
     return (

@@ -20,7 +20,7 @@ const Homepage = () => {
     return (
         <div className={"container"}>
             { storyList.length > 0 ?
-                storyList.map((story, index) => (
+                storyList.map((story) => (
                     <Story key={story.id} id={story.id} title={story.title} description={story.description} user={story.user} image={story.image}/>
                 ))
                 :

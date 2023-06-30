@@ -68,7 +68,7 @@ const Posts = () => {
             >
                 {
                     posts.map((post, index) => (
-                        <Post key={post.id} id={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Post>
+                        <Post key={index} id={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Post>
                     ))
                 }
             </InfiniteScroll>

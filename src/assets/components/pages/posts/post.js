@@ -15,7 +15,7 @@ const Post = (props) => {
 
     useEffect(() => {
         const token = JWT.decodeToken();
-        setOwner(token.sub == user);
+        setOwner(parseInt(token.sub) === user);
     }, [user]);
 
     const getTime = (date) => {
@@ -31,7 +31,7 @@ const Post = (props) => {
 
     const setupImageGallery = () => {
         const tmpImages = []
-        images.forEach((item, index) => {
+        images.forEach((item) => {
             const image = {
                 original: item.image,
                 thumbnail: item.image,
@@ -40,7 +40,6 @@ const Post = (props) => {
             }
             tmpImages.push(image);
         });
-        console.log(tmpImages)
         return tmpImages
     }
 
@@ -48,8 +47,9 @@ const Post = (props) => {
         <div className={"post"}>
             <h2 className={""}>{title}</h2>
             <p>{description}</p>
-            { images.length > 0 ?
-                <ImageGallery items={setupImageGallery()} lazyLoad={true} showThumbnails={false} showIndex={true} showPlayButton={false} showFullscreenButton={false}/>
+            {images.length > 0 ?
+                <ImageGallery items={setupImageGallery()} lazyLoad={true} showThumbnails={false} showIndex={true}
+                              showPlayButton={false} showFullscreenButton={false}/>
                 : null
             }
             <div>

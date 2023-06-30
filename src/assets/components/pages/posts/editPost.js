@@ -20,11 +20,6 @@ function EditPost() {
 
     useEffect(() => {
 
-        getPost(id)
-
-    }, [id]);
-
-    const getPost = (id) => {
         PostApi.getPost(id)
             .then((response) => {
                 setTitle(response.title);
@@ -40,11 +35,11 @@ function EditPost() {
                     setError(true);
                 }
             });
-    }
+    }, [id, navigate]);
 
     const deletePost = () => {
         PostApi.deletePost(id)
-            .then((response) => {
+            .then(() => {
                 navigate(`/story/${storyId}`);
             })
             .catch(err => {
@@ -84,7 +79,7 @@ function EditPost() {
 
     function editPost(title, description, newImg, delImg) {
         PostApi.editPost(id, title, description, newImg, delImg)
-            .then((response) => {
+            .then(() => {
                 // console.log(response)
                 navigate(`/story/${storyId}`);
             })
