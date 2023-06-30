@@ -25,11 +25,14 @@ export const PostApi = {
         return response.data
     },
 
-    editPost: async function (id, title, description, img) {
+    editPost: async function (id, title, description, newImg, delImg) {
         const data = {
             title: title,
             description: description,
-            image: img
+            images: {
+                new: newImg,
+                delete: delImg
+            }
         }
         const response = await api.request({
             url: `api/post/edit/${id}`,
@@ -42,6 +45,15 @@ export const PostApi = {
     deletePost: async function (id) {
         const response = await api.request({
             url: `api/post/delete/${id}`,
+            method: "DELETE",
+        })
+
+        return response.data
+    },
+
+    deleteImage: async function (id) {
+        const response = await api.request({
+            url: `api/image/delete/${id}`,
             method: "DELETE",
         })
 

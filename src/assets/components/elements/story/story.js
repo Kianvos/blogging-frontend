@@ -20,7 +20,7 @@ const Story = (props) => {
             <p>{title}</p>
             <p>{description}</p>
             <p>{user.first_name} {user.last_name}</p>
-            <img className={"story-image"} src={`data:image/jpeg;base64,${image}`}
+            <img className={"story-image"} src={image}
                  alt={`Foto die bij ${title} hoort.`}/>
             <div>
                 <Link to={`/story/${props.id}`}>Naar posts</Link>

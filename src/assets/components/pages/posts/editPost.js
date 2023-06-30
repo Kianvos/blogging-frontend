@@ -1,21 +1,25 @@
 import {useEffect, useState} from "react";
-import {StoryApi} from "../../../../helper/api/story";
 import {useNavigate, useParams} from "react-router-dom";
-import {IMG} from "../../../../helper/img";
-import './story.css';
+import './post.css';
 import {PostApi} from "../../../../helper/api/post";
+import {IMG} from "../../../../helper/img";
 
 function EditPost() {
     const navigate = useNavigate()
     const {id} = useParams();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [image, setImage] = useState();
+    const [storyId, setStoryId] = useState();
+    const [images, setImages] = useState([]);
     const [showFileInput, setShowFileInput] = useState(false);
+
+    const [newImages, setNewImages] = useState([]);
+    const [deletedImages, setDeletedImages] = useState([]);
 
     const [error, setError] = useState(false);
 
     useEffect(() => {
+
         getPost(id)
 
     }, [id]);
@@ -25,7 +29,23 @@ function EditPost() {
             .then((response) => {
                 setTitle(response.title);
                 setDescription(response.description);
-                setImage(response.image);
+                setStoryId(response.story_id);
+                setImages(response.images);
+            })
+            .catch(err => {
+                if (err.response && err.response.status === 404) {
+                    navigate('/404');
+                } else {
+                    console.error(err);
+                    setError(true);
+                }
+            });
+    }
+
+    const deletePost = () => {
+        PostApi.deletePost(id)
+            .then((response) => {
+                navigate(`/story/${storyId}`);
             })
             .catch(err => {
                 console.error(err);
@@ -33,40 +53,40 @@ function EditPost() {
             });
     }
 
-    // const deletePost = () => {
-    //     PostApi.deletePost(id)
-    //         .then((response) => {
-    //             navigate('/');
-    //         })
-    //         .catch(err => {
-    //             error.log(err);
-    //             setError(true);
-    //         });
-    // }
+    const deleteImage = (imageId) => {
+        setDeletedImages((prevImage) => [...prevImage, imageId]);
+    }
 
-    // const handleImageSelect = async event => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         try {
-    //             let base64String = await IMG.resizeFile(file);
-    //             base64String = base64String.replace("data:image/jpeg;base64,", "");
-    //             setImage(base64String)
-    //         } catch (error) {
-    //             console.error('Er is een fout opgetreden bij het omzetten van de afbeelding:', error);
-    //         }
-    //     }
-    // }
+    const handleImageSelect = async (event) => {
+        let i = 0;
+        for (const file of event.target.files) {
+            i++;
+            if (file) {
+                try {
+                    let base64String = await IMG.resizeFile(file);
+                    base64String = base64String.replace("data:image/jpeg;base64,", "");
+                    const tmp = {
+                        description: `image ${i}`,
+                        image: base64String,
+                    };
+                    setNewImages((prevImage) => [...prevImage, tmp]);
+                } catch (error) {
+                    console.error("Er is een fout opgetreden bij het omzetten van de afbeelding:", error);
+                }
+            }
+        }
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        editPost(title, description, image)
+        editPost(title, description, newImages, deletedImages)
     }
 
-    function editPost(title, description, img) {
-        PostApi.editPost(id, title, description, img)
+    function editPost(title, description, newImg, delImg) {
+        PostApi.editPost(id, title, description, newImg, delImg)
             .then((response) => {
                 // console.log(response)
-                navigate(`/story/${id}`);
+                navigate(`/story/${storyId}`);
             })
             .catch(err => {
                 console.log(err.statusCode)
@@ -83,26 +103,36 @@ function EditPost() {
                 </div>
                 : null
             }
-            {/*<div className="form">*/}
-            {/*    <form onSubmit={handleSubmit} className="story-form">*/}
-            {/*        <button type="button" className="delete-button" onClick={deleteStory}>*/}
-            {/*            Delete post*/}
-            {/*        </button>*/}
-            {/*        <input value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>*/}
-            {/*        <textarea value={description} placeholder="Kort vertellen over de blog."*/}
-            {/*                  onChange={(e) => setDescription(e.target.value)}/>*/}
-            {/*        <button type="button" className="button" onClick={() => setShowFileInput(true)}>*/}
-            {/*            Verander foto*/}
-            {/*        </button>*/}
-            {/*        {showFileInput && (*/}
-            {/*            <input type="file" accept="image/*" onChange={handleImageSelect} />*/}
-            {/*        )}*/}
-            {/*        <button className={"form-button"}>UpdateStory</button>*/}
-            {/*    </form>*/}
-            {/*</div>*/}
+            <div className="form">
+                <form onSubmit={handleSubmit} className="story-form">
+                    <button type="button" className="delete-button" onClick={deletePost}>
+                        Delete post
+                    </button>
+                    <input value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
+                    <textarea value={description} placeholder="Kort vertellen over de blog."
+                              onChange={(e) => setDescription(e.target.value)}/>
+                    <button type="button" className="button" onClick={() => setShowFileInput(true)}>
+                        Verander fotos
+                    </button>
+                    {showFileInput && (
+                        <div>
+                            <input multiple="multiple" type="file" accept="image/*" onChange={handleImageSelect}/>
+                            {images.map((image, index) => (
+                                <div key={index}>
+                                    <img className={"story-image"} src={image.image}
+                                         alt={`${title}-${index}`}/>
+                                    <button type={"button"} onClick={() => deleteImage(image.id)}>X</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <button className={"form-button"}>Update post</button>
+                </form>
+            </div>
         </div>
 
     );
 }
 
-export default EditStory;
+export default EditPost;

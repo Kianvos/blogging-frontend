@@ -33,10 +33,10 @@ const Post = (props) => {
         const tmpImages = []
         images.forEach((item, index) => {
             const image = {
-                original: `data:image/jpeg;base64,${item.image}`,
-                thumbnail: `data:image/jpeg;base64,${item.image}`,
-                originalHeight: 600,
-                originalWidth: 600,
+                original: item.image,
+                thumbnail: item.image,
+                originalHeight: 540,
+                originalWidth: 720,
             }
             tmpImages.push(image);
         });
@@ -49,7 +49,7 @@ const Post = (props) => {
             <h2 className={""}>{title}</h2>
             <p>{description}</p>
             { images.length > 0 ?
-                <ImageGallery items={setupImageGallery()} showThumbnails={false} showIndex={true} showPlayButton={false} showFullscreenButton={false}/>
+                <ImageGallery items={setupImageGallery()} lazyLoad={true} showThumbnails={false} showIndex={true} showPlayButton={false} showFullscreenButton={false}/>
                 : null
             }
             <div>

@@ -7,6 +7,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Post from "./post";
 
 import './post.css';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 const Posts = () => {
@@ -15,11 +16,18 @@ const Posts = () => {
     const [postList, setPostList] = useState([]);
     const [storyInfo, setStoryInfo] = useState([]);
 
+    const [posts, setPosts] = useState([]);
+    const [postsLoaded, setPostsLoaded] = useState(0);
+
+    const [hasMore, setHasMore] = useState(true);
+
     useEffect(() => {
         StoryApi.getStory(id)
             .then((story) => {
                 setPostList(story.posts);
                 setStoryInfo(story);
+                setPosts(story.posts.slice(0, 2))
+                setPostsLoaded(2);
             })
             .catch((error) => {
                 if (error.response && error.response.status === 404) {
@@ -32,6 +40,14 @@ const Posts = () => {
             });
     }, [id, navigate]);
 
+    const fetchMoreData = () => {
+        setPosts(postList.slice(0, postsLoaded+2));
+        setPostsLoaded(postsLoaded+2);
+        if (postsLoaded >= postList.length){
+            setHasMore(false);
+        }
+    };
+
     return (
         <div className={"container"}>
             <div>
@@ -39,12 +55,23 @@ const Posts = () => {
                 <button onClick={() => navigate(`/post/new/${id}`)}>Maak post</button>
             </div>
             <p>{storyInfo.description}</p>
-
-            {
-                postList.map((post, index) => (
-                    <Post key={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Post>
-                ))
-            }
+            <InfiniteScroll
+                dataLength={posts.length}
+                next={fetchMoreData}
+                hasMore={hasMore}
+                loader={<h4>Laden...</h4>}
+                endMessage={
+                    <p style={{ textAlign: "center" }}>
+                        <b>Dat waren alle posts.</b>
+                    </p>
+                }
+            >
+                {
+                    posts.map((post, index) => (
+                        <Post key={post.id} id={post.id} title={post.title} description={post.description} user={storyInfo.user_id} images={post.images} created={post.created_at}></Post>
+                    ))
+                }
+            </InfiniteScroll>
         </div>
     );
 }
