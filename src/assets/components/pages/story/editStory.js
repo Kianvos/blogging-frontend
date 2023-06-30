@@ -10,6 +10,7 @@ function EditStory() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState();
+    const [newImage, setNewImage] = useState("none");
     const [showFileInput, setShowFileInput] = useState(false);
 
     const [error, setError] = useState(false);
@@ -23,7 +24,9 @@ function EditStory() {
         StoryApi.getStory(id)
             .then((response) => {
                 setTitle(response.title);
-                setDescription(response.description);
+                // const formattedText = text.replace(/\\n/g, '\n');
+
+                setDescription(response.description.replace(/\\n/g, '\n'));
                 setImage(response.image);
             })
             .catch(err => {
@@ -34,7 +37,7 @@ function EditStory() {
 
     const deleteStory = () => {
         StoryApi.deleteStory(id)
-            .then((response) => {
+            .then(() => {
                 navigate('/');
             })
             .catch(err => {
@@ -49,7 +52,7 @@ function EditStory() {
             try {
                 let base64String = await IMG.resizeFile(file);
                 base64String = base64String.replace("data:image/jpeg;base64,", "");
-                setImage(base64String)
+                setNewImage(base64String);
             } catch (error) {
                 console.error('Er is een fout opgetreden bij het omzetten van de afbeelding:', error);
             }
@@ -58,12 +61,16 @@ function EditStory() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        editStory(title, description, image)
+        console.log(description);
+        const descriptionEnter = description.replace(/\r?\n/g, '\\n');
+        console.log(descriptionEnter);
+
+        editStory(title, descriptionEnter, newImage)
     }
 
     function editStory(title, description, img) {
         StoryApi.editStory(id, title, description, img)
-            .then((response) => {
+            .then(() => {
                 // console.log(response)
                 navigate(`/story/${id}`);
             })
@@ -85,7 +92,7 @@ function EditStory() {
             <div className="form">
                 <form onSubmit={handleSubmit} className="story-form">
                     <button type="button" className="delete-button" onClick={deleteStory}>
-                        Delete foto
+                        Delete story
                     </button>
                     <input value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
                     <textarea value={description} placeholder="Kort vertellen over de blog."

@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {NavLink, useLocation} from "react-router-dom";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {RiCloseLine, RiMenuLine} from "react-icons/ri";
 
 import {JWT} from "../../../helper/jwt";
 import './defaults.css';
+import {FaHome} from "react-icons/fa";
 
 const Header = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [loggedIn, setLoggedIn] = useState(JWT.isLoggedIn());
@@ -27,10 +29,15 @@ const Header = () => {
         window.location.href = "/"
     }
 
+    const HandleLogin = () => {
+        navigate('/login');
+        setMenuOpen(false);
+    }
+
     return (
         <nav className="navbar">
             <div className="navbar-left">
-                <NavLink onClick={closeMenu} to="/">Blogging</NavLink>
+                <NavLink className={"brand-name"} onClick={closeMenu} to="/"><FaHome fontSize={26}/> Blogging</NavLink>
             </div>
             <div className={`navbar-menu ${menuOpen ? 'is-active' : ''}`}>
                 <ul>
@@ -40,11 +47,11 @@ const Header = () => {
                     {
                         loggedIn ?
                             <li>
-                                <button onClick={HandleLogout}>Uitloggen</button>
+                                <button className={"log-in-out-button"} type={"button"} onClick={HandleLogout}>Uitloggen</button>
                             </li>
                             :
                             <li>
-                                <NavLink onClick={closeMenu} to="/login">Login</NavLink>
+                                <button className={"log-in-out-button"} type={"button"} onClick={HandleLogin}>Inloggen</button>
                             </li>
                     }
                 </ul>

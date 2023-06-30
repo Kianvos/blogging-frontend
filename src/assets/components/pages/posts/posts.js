@@ -15,6 +15,7 @@ const Posts = () => {
     const {id} = useParams();
     const [postList, setPostList] = useState([]);
     const [storyInfo, setStoryInfo] = useState([]);
+    const [alineas, setAlineas] = useState([]);
 
     const [posts, setPosts] = useState([]);
     const [postsLoaded, setPostsLoaded] = useState(0);
@@ -28,6 +29,8 @@ const Posts = () => {
                 setStoryInfo(story);
                 setPosts(story.posts.slice(0, 2))
                 setPostsLoaded(2);
+                setAlineas(story.description.split('\\n'))
+
             })
             .catch((error) => {
                 if (error.response && error.response.status === 404) {
@@ -38,6 +41,7 @@ const Posts = () => {
             })
             .finally(() => {
             });
+
     }, [id, navigate]);
 
     const fetchMoreData = () => {
@@ -54,17 +58,16 @@ const Posts = () => {
                 <h1>{storyInfo.title}</h1>
                 <button onClick={() => navigate(`/post/new/${id}`)}>Maak post</button>
             </div>
-            <p>{storyInfo.description}</p>
+            {
+                alineas.map((alinea, index) => (
+                    <p key={index} className={"story-description"}>{alinea}</p>
+                ))
+            }
             <InfiniteScroll
                 dataLength={posts.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
                 loader={<h4>Laden...</h4>}
-                endMessage={
-                    <p style={{ textAlign: "center" }}>
-                        <b>Dat waren alle posts.</b>
-                    </p>
-                }
             >
                 {
                     posts.map((post, index) => (

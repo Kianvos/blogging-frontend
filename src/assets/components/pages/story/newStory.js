@@ -28,7 +28,10 @@ function NewStory() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        createStory(title, description, image)
+        console.log(description);
+        const descriptionEnter = description.replace(/\r\n/g, '\\n');
+
+        createStory(title, descriptionEnter, image)
     }
 
     function createStory(title, description, img) {
