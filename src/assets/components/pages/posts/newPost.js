@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {StoryApi} from "../../../../helper/api/story";
 import {useNavigate, useParams} from "react-router-dom";
 import {IMG} from "../../../../helper/img";
 import {PostApi} from "../../../../helper/api/post";
@@ -17,8 +16,6 @@ function NewPost() {
     const [error, setError] = useState(false);
 
 
-    const [status, setstatus] = useState(0);
-
     const handleImageSelect = async (event) => {
         let i = 0;
         for (const file of event.target.files) {
@@ -33,7 +30,6 @@ function NewPost() {
                     };
                     setImage((prevImage) => [...prevImage, tmp]);
                 } catch (error) {
-                    setstatus(2);
                     NotificationHandler.createNotification("Error", "Er is een fout opgetreden bij het omzetten van de afbeelding!")
                 }
             }
@@ -47,13 +43,11 @@ function NewPost() {
 
     function createPost(title, description, img) {
         PostApi.createPost(storyId, title, description, img)
-            .then((response) => {
+            .then(() => {
                 navigate(`/story/${storyId}`);
             })
             .catch(err => {
                 console.log(err.statusCode)
-                setstatus(err.statusCode);
-
                 setError(true);
             });
     }

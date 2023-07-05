@@ -40,7 +40,7 @@ function EditStory() {
                 NotificationHandler.createNotification("success", "Story is verwijderd.")
                 navigate('/');
             })
-            .catch(err => {
+            .catch(() => {
                 NotificationHandler.createNotification("error", "Story kon niet verwijderd worden, probeer het later opnieuw.")
             });
     }

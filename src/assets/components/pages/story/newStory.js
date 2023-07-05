@@ -14,7 +14,6 @@ function NewStory() {
     const [image, setImage] = useState("");
     const [imageSelected, setImageSelected] = useState(false);
 
-    const [error, setError] = useState(false);
 
     const handleImageSelect = async event => {
         const file = event.target.files[0];
@@ -49,9 +48,8 @@ function NewStory() {
                 navigate(`/story/${id}`);
                 NotificationHandler.createNotification("success", "Nieuwe story is aangemaakt!")
             })
-            .catch(err => {
+            .catch(() => {
                 NotificationHandler.createNotification("error", "Er is iets fout gegaan, probeer later opnieuw.")
-                setError(true);
             });
     }
 

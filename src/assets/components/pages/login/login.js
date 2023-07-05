@@ -25,7 +25,7 @@ const Login = () => {
                 NotificationHandler.createNotification("success", "Je bent ingelogd!")
                 navigate("/");
             })
-            .catch(err => {
+            .catch(() => {
                 NotificationHandler.createNotification("error", "Email/ wachtwoord klopt niet.")
                 setError(true);
             });
