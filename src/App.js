@@ -12,6 +12,9 @@ import {useEffect, useState} from "react";
 import EditStory from "./assets/components/pages/story/editStory";
 import NewPost from "./assets/components/pages/posts/newPost";
 import EditPost from "./assets/components/pages/posts/editPost";
+import NotificationContainer from "react-notifications/lib/NotificationContainer";
+import 'react-notifications/lib/notifications.css';
+
 
 
 function App() {

@@ -2,6 +2,8 @@ import {useState} from "react";
 import {StoryApi} from "../../../../helper/api/story";
 import {useNavigate} from "react-router-dom";
 import {IMG} from "../../../../helper/img";
+import TextareaAutosize from 'react-textarea-autosize';
+import {NotificationHandler} from "../../elements/notification/notification";
 
 
 function NewStory() {
@@ -10,6 +12,7 @@ function NewStory() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState("");
+    const [imageSelected, setImageSelected] = useState(false);
 
     const [error, setError] = useState(false);
 
@@ -20,30 +23,34 @@ function NewStory() {
                 let base64String = await IMG.resizeFile(file);
                 base64String = base64String.replace("data:image/jpeg;base64,", "");
                 setImage(base64String)
+                setImageSelected(true);
             } catch (error) {
-                console.error('Er is een fout opgetreden bij het omzetten van de afbeelding:', error);
+                NotificationHandler.createNotification("Error", "Er is een fout opgetreden bij het omzetten van de afbeelding!")
             }
         }
     }
 
+    const handleImageUpdate = () => {
+        setImage("");
+        setImageSelected(false)
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(description);
         const descriptionEnter = description.replace(/\r\n/g, '\\n');
 
         createStory(title, descriptionEnter, image)
     }
 
     function createStory(title, description, img) {
-        // console.log("title: " + title);
-        // console.log("img: " + img);
         StoryApi.createStory(title, description, img)
             .then((response) => {
                 const id = response.id;
                 navigate(`/story/${id}`);
+                NotificationHandler.createNotification("success", "Nieuwe story is aangemaakt!")
             })
             .catch(err => {
-                console.log(err.statusCode)
+                NotificationHandler.createNotification("error", "Er is iets fout gegaan, probeer later opnieuw.")
                 setError(true);
             });
     }
@@ -51,19 +58,21 @@ function NewStory() {
 
     return (
         <div className={"wrapper-story"}>
-            {error ?
-                <div className={"error-message"}>
-                    <p>Er is iets fout gegaan..</p>
-                </div>
-                : null
-            }
             <div className="form">
                 <h1>Nieuwe story</h1>
                 <form onSubmit={handleSubmit} className="story-form">
                     <input type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
-                    <textarea placeholder="Kort vertellen over de blog."
-                              onChange={(e) => setDescription(e.target.value)}/>
-                    <input type="file" accept="image/*" onChange={handleImageSelect}/>
+                    <TextareaAutosize className={"story-text-area"} placeholder={"Kort vertellen over de blog."}
+                                      onChange={(e) => setDescription(e.target.value)}
+                                      minRows={5}/>
+                    {imageSelected ?
+                        <div className={"story-image-container"}>
+                            <img className={"story-image"} src={"data:image/jpeg;base64,"+image} alt={"gekozen foto"}/>
+                            <button className={"update-image-button"} type={"button"} onClick={handleImageUpdate} >Foto aanpassen</button>
+                        </div>
+                        :
+                        <input type="file" accept="image/*" onChange={handleImageSelect}/>
+                    }
                     <button className={"form-button"}>Maak story aan</button>
                 </form>
             </div>

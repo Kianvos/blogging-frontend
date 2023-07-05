@@ -3,6 +3,7 @@ import {LoginApi} from "../../../../helper/api/login";
 import {useNavigate} from "react-router-dom";
 
 import './login.css';
+import {NotificationHandler} from "../../elements/notification/notification";
 
 const Login = () => {
     const navigate = useNavigate()
@@ -21,10 +22,11 @@ const Login = () => {
                 const token = response.access_token;
                 //set JWT token in localstorage
                 localStorage.setItem("token", token);
+                NotificationHandler.createNotification("success", "Je bent ingelogd!")
                 navigate("/");
             })
             .catch(err => {
-                console.error(err)
+                NotificationHandler.createNotification("error", "Email/ wachtwoord klopt niet.")
                 setError(true);
             });
     }

@@ -3,6 +3,7 @@ import {StoryApi} from "../../../../helper/api/story";
 import {useNavigate, useParams} from "react-router-dom";
 import {IMG} from "../../../../helper/img";
 import {PostApi} from "../../../../helper/api/post";
+import {NotificationHandler} from "../../elements/notification/notification";
 
 
 function NewPost() {
@@ -33,7 +34,7 @@ function NewPost() {
                     setImage((prevImage) => [...prevImage, tmp]);
                 } catch (error) {
                     setstatus(2);
-                    console.error("Er is een fout opgetreden bij het omzetten van de afbeelding:", error);
+                    NotificationHandler.createNotification("Error", "Er is een fout opgetreden bij het omzetten van de afbeelding!")
                 }
             }
         }

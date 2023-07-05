@@ -3,17 +3,19 @@ import {StoryApi} from "../../../../helper/api/story";
 import {useNavigate, useParams} from "react-router-dom";
 import {IMG} from "../../../../helper/img";
 import './story.css';
+import {NotificationHandler} from "../../elements/notification/notification";
+import {MdDelete} from "react-icons/md";
+import TextareaAutosize from "react-textarea-autosize";
 
 function EditStory() {
     const navigate = useNavigate()
     const {id} = useParams();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [image, setImage] = useState();
+    const [image, setImage] = useState("");
     const [newImage, setNewImage] = useState("none");
     const [showFileInput, setShowFileInput] = useState(false);
-
-    const [error, setError] = useState(false);
+    const [newImageSelected, setNewImageSelected] = useState(false);
 
     useEffect(() => {
         getStory(id)
@@ -24,25 +26,22 @@ function EditStory() {
         StoryApi.getStory(id)
             .then((response) => {
                 setTitle(response.title);
-                // const formattedText = text.replace(/\\n/g, '\n');
-
                 setDescription(response.description.replace(/\\n/g, '\n'));
                 setImage(response.image);
             })
-            .catch(err => {
-                console.error(err);
-                setError(true);
+            .catch(() => {
+                NotificationHandler.createNotification("error", "Story niet gevonden.")
             });
     }
 
     const deleteStory = () => {
         StoryApi.deleteStory(id)
             .then(() => {
+                NotificationHandler.createNotification("success", "Story is verwijderd.")
                 navigate('/');
             })
             .catch(err => {
-                console.error(err);
-                setError(true);
+                NotificationHandler.createNotification("error", "Story kon niet verwijderd worden, probeer het later opnieuw.")
             });
     }
 
@@ -53,17 +52,22 @@ function EditStory() {
                 let base64String = await IMG.resizeFile(file);
                 base64String = base64String.replace("data:image/jpeg;base64,", "");
                 setNewImage(base64String);
+                setNewImageSelected(true);
+                setShowFileInput(false);
             } catch (error) {
-                console.error('Er is een fout opgetreden bij het omzetten van de afbeelding:', error);
+                NotificationHandler.createNotification("Error", "Er is een fout opgetreden bij het omzetten van de afbeelding!")
             }
         }
     }
 
+    const handleImageUpdate = () => {
+        setImage("");
+        setShowFileInput(true)
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(description);
         const descriptionEnter = description.replace(/\r?\n/g, '\\n');
-        console.log(descriptionEnter);
 
         editStory(title, descriptionEnter, newImage)
     }
@@ -71,38 +75,41 @@ function EditStory() {
     function editStory(title, description, img) {
         StoryApi.editStory(id, title, description, img)
             .then(() => {
-                // console.log(response)
+                NotificationHandler.createNotification("success", "Story is succesvol aangepast.")
                 navigate(`/story/${id}`);
             })
-            .catch(err => {
-                console.log(err.statusCode)
-                setError(true);
+            .catch(() => {
+                NotificationHandler.createNotification("Error", "Veranderingen aan story zijn niet opgeslagen.")
             });
     }
 
 
     return (
         <div className={"wrapper-story"}>
-            {error ?
-                <div className={"error-message"}>
-                    <p>Er is iets fout gegaan..</p>
-                </div>
-                : null
-            }
             <div className="form">
-                <form onSubmit={handleSubmit} className="story-form">
-                    <button type="button" className="delete-button" onClick={deleteStory}>
-                        Delete story
-                    </button>
-                    <input value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
-                    <textarea value={description} placeholder="Kort vertellen over de blog."
-                              onChange={(e) => setDescription(e.target.value)}/>
-                    <button type="button" className="button" onClick={() => setShowFileInput(true)}>
-                        Verander foto
-                    </button>
-                    {showFileInput && (
+
+                <form onSubmit={handleSubmit} className="story-post">
+                    <div className={"top-story"}>
+                        <input className={"title-input"} value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
+                        <MdDelete className={"icon-delete"} onClick={deleteStory} fontSize={36}/>
+                    </div>
+
+                    <TextareaAutosize value={description} className={"story-text-area"} placeholder={"Kort vertellen over de blog."}
+                                      onChange={(e) => setDescription(e.target.value)}
+                                      minRows={5}/>
+                    {showFileInput ?
                         <input type="file" accept="image/*" onChange={handleImageSelect} />
-                    )}
+                        :
+                        <div className={"story-image-container"}>
+                            {newImageSelected ?
+                                <img className={"story-image"} src={"data:image/jpeg;base64," + newImage} alt={"gekozen foto"}/>
+                                :
+                                <img className={"story-image"} src={image} alt={"gekozen foto"}/>
+
+                            }
+                            <button className={"update-image-button"} type={"button"} onClick={handleImageUpdate}>Verander foto</button>
+                        </div>
+                    }
                     <button className={"form-button"}>UpdateStory</button>
                 </form>
             </div>

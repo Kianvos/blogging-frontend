@@ -99,7 +99,7 @@ function EditPost() {
                 : null
             }
             <div className="form">
-                <form onSubmit={handleSubmit} className="story-form">
+                <form onSubmit={handleSubmit} className="story-post">
                     <button type="button" className="delete-button" onClick={deletePost}>
                         Delete post
                     </button>

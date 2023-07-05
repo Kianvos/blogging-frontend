@@ -14,8 +14,10 @@
     "react-image-gallery": "^1.2.12",
     "react-infinite-scroll-component": "^6.1.0",
     "react-jwt": "^1.2.0",
+    "react-notifications": "^1.7.4",
     "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
+    "react-textarea-autosize": "^8.5.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

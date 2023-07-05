@@ -1,9 +1,46 @@
-.delete-button{
+.delete-button {
     background-color: red;
     border: 0;
     width: 100%;
 }
 
-.delete-button:hover{
+.delete-button:hover {
     background-color: darkred;
+}
+
+.story-text-area {
+    border-color: darkslategray;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 15px;
+}
+
+.story-text-area::placeholder {
+    text-align: center;
+    align-self: center;
+}
+
+.story-image-container {
+    margin: 10px;
+}
+
+.update-image-button {
+    margin: 0;
+    padding: 10px;
+    border: 0;
+    width: 100%;
+}
+
+
+.icon-delete {
+    margin-bottom: 10px;
+}
+
+.icon-delete:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.title-input {
+
 }

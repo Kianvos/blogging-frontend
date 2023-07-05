@@ -5,6 +5,7 @@ import {RiCloseLine, RiMenuLine} from "react-icons/ri";
 import {JWT} from "../../../helper/jwt";
 import './defaults.css';
 import {FaHome} from "react-icons/fa";
+import {NotificationHandler} from "../elements/notification/notification";
 
 const Header = () => {
     const navigate = useNavigate();
@@ -26,7 +27,8 @@ const Header = () => {
 
     const HandleLogout = () => {
         JWT.logout()
-        window.location.href = "/"
+        NotificationHandler.createNotification("success", "Je bent uitgelogd!")
+        navigate("/");
     }
 
     const HandleLogin = () => {

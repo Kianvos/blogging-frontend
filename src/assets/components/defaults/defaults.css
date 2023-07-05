@@ -71,9 +71,11 @@
 
 .footer{
     height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: darkslategray;
-    overflow:auto;
-
+    color: silver;
 }
 
 @media screen and (max-width: 768px) {
@@ -116,5 +118,9 @@
 
     .navbar-menu.is-active ul {
         display: block;
+    }
+
+    .navbar-left {
+        margin-left: 1.5rem;
     }
 }
