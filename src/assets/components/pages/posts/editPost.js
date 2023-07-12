@@ -3,6 +3,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import './post.css';
 import {PostApi} from "../../../../helper/api/post";
 import {IMG} from "../../../../helper/img";
+import {MdDelete} from "react-icons/md";
+import TextareaAutosize from "react-textarea-autosize";
+import {NotificationHandler} from "../../elements/notification/notification";
 
 function EditPost() {
     const navigate = useNavigate()
@@ -16,7 +19,10 @@ function EditPost() {
     const [newImages, setNewImages] = useState([]);
     const [deletedImages, setDeletedImages] = useState([]);
 
-    const [error, setError] = useState(false);
+
+    const updateShowFileInput = () => {
+        setShowFileInput(!showFileInput);
+    }
 
     useEffect(() => {
 
@@ -31,8 +37,7 @@ function EditPost() {
                 if (err.response && err.response.status === 404) {
                     navigate('/404');
                 } else {
-                    console.error(err);
-                    setError(true);
+                    NotificationHandler.createNotification("error", "Probeer het later opnieuw.")
                 }
             });
     }, [id, navigate]);
@@ -40,16 +45,21 @@ function EditPost() {
     const deletePost = () => {
         PostApi.deletePost(id)
             .then(() => {
+                NotificationHandler.createNotification("success", "Post succesvol verwijderd.")
                 navigate(`/story/${storyId}`);
             })
-            .catch(err => {
-                console.error(err);
-                setError(true);
+            .catch(() => {
+                NotificationHandler.createNotification("error", "Post niet verwijderd.")
             });
     }
 
-    const deleteImage = (imageId) => {
-        setDeletedImages((prevImage) => [...prevImage, imageId]);
+    const deleteImage = (imageId, isNew) => {
+        if (isNew) {
+            setNewImages(newImages.filter(item => item.image !== imageId))
+        } else {
+            setImages(images.filter(item => item.id !== imageId))
+            setDeletedImages((prevImage) => [...prevImage, imageId]);
+        }
     }
 
     const handleImageSelect = async (event) => {
@@ -70,6 +80,7 @@ function EditPost() {
                 }
             }
         }
+        event.target.value = null;
     };
 
     const handleSubmit = (event) => {
@@ -80,45 +91,57 @@ function EditPost() {
     function editPost(title, description, newImg, delImg) {
         PostApi.editPost(id, title, description, newImg, delImg)
             .then(() => {
-                // console.log(response)
                 navigate(`/story/${storyId}`);
+                NotificationHandler.createNotification("success", "Post succesvol aangepast.")
+
             })
-            .catch(err => {
-                console.log(err.statusCode)
-                setError(true);
+            .catch(() => {
+                NotificationHandler.createNotification("error", "Het is niet gelukt om de post te verwijderen.")
             });
     }
 
 
     return (
         <div className={"wrapper-story"}>
-            {error ?
-                <div className={"error-message"}>
-                    <p>Er is iets fout gegaan..</p>
-                </div>
-                : null
-            }
             <div className="form">
                 <form onSubmit={handleSubmit} className="story-post">
-                    <button type="button" className="delete-button" onClick={deletePost}>
-                        Delete post
-                    </button>
-                    <input value={title} type="text" placeholder="Titel" onChange={(e) => setTitle(e.target.value)}/>
-                    <textarea value={description} placeholder="Kort vertellen over de blog."
-                              onChange={(e) => setDescription(e.target.value)}/>
-                    <button type="button" className="button" onClick={() => setShowFileInput(true)}>
-                        Verander fotos
-                    </button>
+                    <div className={"top-story"}>
+                        <input className={"title-input"} value={title} type="text" placeholder="Titel"
+                               onChange={(e) => setTitle(e.target.value)}/>
+                        <MdDelete className={"icon-delete"} onClick={deletePost} fontSize={36}/>
+                    </div>
+                    <TextareaAutosize value={description} className={"story-text-area"}
+                                      placeholder={"Kort vertellen over de dag."}
+                                      onChange={(e) => setDescription(e.target.value)}
+                                      minRows={5}/>
+                    {showFileInput ?
+                        <button className={"update-image-button"} type={"button"} onClick={updateShowFileInput}>
+                            Verklein
+                        </button>
+                        :
+                        <button className={"update-image-button"} type={"button"} onClick={updateShowFileInput}>
+                            Update images
+                        </button>
+                    }
                     {showFileInput && (
                         <div>
                             <input multiple="multiple" type="file" accept="image/*" onChange={handleImageSelect}/>
-                            {images.map((image, index) => (
-                                <div key={index}>
-                                    <img className={"story-image"} src={image.image}
-                                         alt={`${title}-${index}`}/>
-                                    <button type={"button"} onClick={() => deleteImage(image.id)}>X</button>
-                                </div>
-                            ))}
+                            <div className={"post-images"}>
+                                {
+                                    newImages.map((image, index) => (
+                                        <button key={index} className={"image-remove-button"} type={"button"}
+                                                onClick={() => deleteImage(image.image, true)}><img
+                                            className={"post-image"} src={"data:image/jpeg;base64," + image.image}
+                                            alt={`${title}-${index}`}/></button>
+                                    ))
+                                }
+                                {images.map((image, index) => (
+                                    <button key={index} className={"image-remove-button"} type={"button"}
+                                            onClick={() => deleteImage(image.id, false)}><img
+                                        className={"post-image"} src={image.image}
+                                        alt={`${title}-${index}`}/></button>
+                                ))}
+                            </div>
                         </div>
                     )}
 

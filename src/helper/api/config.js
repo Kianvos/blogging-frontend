@@ -1,9 +1,6 @@
 import axios from "axios"
 export const api = axios.create({
     baseURL: process.env.REACT_APP_API_URL + "/",
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
 })
 
 const errorHandler = (error) => {
@@ -25,6 +22,14 @@ const errorHandler = (error) => {
 
     return Promise.reject(error)
 }
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 api.interceptors.response.use(undefined, (error) => {
     return errorHandler(error)

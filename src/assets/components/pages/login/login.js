@@ -22,6 +22,7 @@ const Login = () => {
                 const token = response.access_token;
                 //set JWT token in localstorage
                 localStorage.setItem("token", token);
+
                 NotificationHandler.createNotification("success", "Je bent ingelogd!")
                 navigate("/");
             })

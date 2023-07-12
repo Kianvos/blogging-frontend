@@ -29,7 +29,7 @@ const Posts = () => {
                 setStoryInfo(story);
                 setPosts(story.posts.slice(0, 2))
                 setPostsLoaded(2);
-                setAlineas(story.description.split('\\n'))
+                setAlineas(story.description.split('\\n\\n'))
 
             })
             .catch((error) => {
@@ -53,16 +53,17 @@ const Posts = () => {
     };
 
     return (
-        <div className={"container"}>
-            <div>
+        <div className={"container-posts"}>
+            <div className={"top-posts"}>
+                <span/>
                 <h1>{storyInfo.title}</h1>
-                <button onClick={() => navigate(`/post/new/${id}`)}>Maak post</button>
+                <button className={"new-post"} onClick={() => navigate(`/post/new/${id}`)}>Maak post</button>
             </div>
-            {
-                alineas.map((alinea, index) => (
-                    <p key={index} className={"story-description"}>{alinea}</p>
-                ))
-            }
+            {/*{*/}
+            {/*    alineas.map((alinea, index) => (*/}
+            {/*        <p key={index} className={"story-description"}>{alinea}</p>*/}
+            {/*    ))*/}
+            {/*}*/}
             <InfiniteScroll
                 dataLength={posts.length}
                 next={fetchMoreData}
